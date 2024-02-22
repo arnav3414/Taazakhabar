@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Taaza Khabar</title>
+        <link rel="icon" href="./media/HYPE LOGO.gif" type="image/x-icon">
+        <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <style>
+    
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .card {
+        animation: fadeIn .5s ease-out;
+    }
+
+    .card:hover {
+        transform: scale(1.05);
+    }
+
+    .card-img-top {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .brand {
+        position: absolute;
+        left: 0;
+        margin-left: 15px;
+        cursor: pointer;
+        font-size: 24px;
+        color: black;
+    }
+    
+    .nav {
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .nav-item {
+        margin: 0 10px;
+        cursor: pointer;
+    }
+    
+    .search-form {
+        margin-left: auto;
+    }
+
+</style>
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container">
+                <a class="brand" onclick="window.location.reload()">Taaza
+                    Khabar</a>
+                <button class="navbar-toggler" type="button"
+                    data-toggle="collapse" data-target="#navbarNav"
+                    aria-controls="navbarNav" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="nav">
+                        <li class="nav-item">
+                            <a class="nav-link">Science</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">Stocks</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">Gaming</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link">Politics</a>
+                        </li>
+                    </ul>
+                </div>
+                <form id="searchForm" class="search-form form-inline">
+                    <input id="searchInput" class="form-control mr-sm-2"
+                        type="search" placeholder="Search Topic"
+                        aria-label="Search">
+                    <button id="searchButton"
+                        class="btn btn-outline-primary my-2 my-sm-0"
+                        type="submit">Search</button>
+                </form>
+            </div>
+        </nav>
+
+        <div class="container">
+            <div id="newsList" class="row mt-5"></div>
+            <div class="text-center mt-3">
+                <button id="refreshButton" class="btn btn-primary">More
+                    News</button>
+            </div>
+        </div>
+
+        <script>
+document.addEventListener("DOMContentLoaded", function () {
+    let numNewsDisplayed = 8;
+
+    function fetchNews(query) {
+        let url;
+        if (query) {
+            url = `https://newsapi.org/v2/everything?q=${query}&apiKey=1652eb47aa40421eb92575b017648bcc&pageSize=${numNewsDisplayed}`;
+        } else {
+            url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=1652eb47aa40421eb92575b017648bcc&pageSize=${numNewsDisplayed}`;
+        }
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const newsList = document.getElementById("newsList");
+                newsList.innerHTML = ''; 
+                data.articles.forEach(article => {
+                    const newsItem = `
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <img src="${article.urlToImage}" class="card-img-top" alt="News Image">
+                                <div class="card-body">
+                                    <h5 class="card-title">${article.title}</h5>
+                                    <p class="card-text">${article.description}</p>
+                                    <a href="${article.url}" target="_blank" class="btn btn-primary">Read More</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    newsList.innerHTML += newsItem;
+                });
+            })
+            .catch(error => console.log(error));
+    }
+
+    function searchNewsByTopic(topic) {
+        fetchNews(topic);
+    }
+
+    fetchNews();
+
+    document.querySelectorAll('.nav-link').forEach(item => {
+        item.addEventListener('click', event => {
+            const topic = event.target.textContent.trim();
+            searchNewsByTopic(topic);
+        })
+    });
+
+    document.getElementById("refreshButton").addEventListener("click", function() {
+        numNewsDisplayed += 8; 
+        fetchNews();
+    });
+
+    document.getElementById("searchForm").addEventListener("submit", function(event) {
+        event.preventDefault(); 
+        const query = document.getElementById("searchInput").value;
+        if (query.trim() !== "") {
+            fetchNews(query);
+        }
+    });
+});
+</script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script
+            src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+        <script
+            src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    </body>
+</html>
