@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentQuery = urlParams.get('query') || '';
 
     function fetchNews(page, query = currentQuery) {
-        const apiKey = 'c6a04cf289d54f859f71a25cebe0c434';
+        const apiKey = '1652eb47aa40421eb92575b017648bcc';
         let url;
 
         if (query) {
