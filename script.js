@@ -6,14 +6,14 @@ document.addEventListener("DOMContentLoaded", function() {
     let currentQuery = urlParams.get('query') || '';
 
     function fetchNews(page, query = currentQuery) {
-        const apiKey = '1652eb47aa40421eb92575b017648bcc';
+        const apiKey = 'c6a04cf289d54f859f71a25cebe0c434';
         let url;
 
         if (query) {
-            url = `https://newsapi.org/v2/everything?q=${query}&apiKey=${apiKey}&page=${page}&pageSize=${newsPerPage}`;
-        } else {
-            url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${apiKey}&page=${page}&pageSize=${newsPerPage}`;
-        }
+  url = `https://newsapi.org/v2/everything?q=${query}&apiKey=${apiKey}&page=${page}&pageSize=${newsPerPage}&hasImage=true`;
+} else {
+  url = `https://newsapi.org/v2/top-headlines?country=in&apiKey=${apiKey}&page=${page}&pageSize=${newsPerPage}&hasImage=true`;
+}
 
         fetch(url)
             .then(response => response.json())
